@@ -1,0 +1,24 @@
+monitor-2.1
+===========
+- autotools configuration reset
+- PAPI time tracing was ignoring threads
+
+
+monitor-2.0
+===========
+- Monitoring is fully extended to the target process and its children/threads
+- Almost complete rewrite of the monitor.
+- Tracing is now done at some specific and registered syscalls.
+- CPU time can now be accurately measured by PAPI (http://icl.cs.utk.edu/papi/)
+
+
+monitor-1.0
+===========
+- First release.
+- Signal tracing with ptrace.
+- Memory usage and wall time with glibtop.
+
+This release was used against IMAP servers. The results were presented in
+"Using Attack Injection to Discover New Vulnerabilities", DSN'06, and
+in the technical report "Vulnerability Assessment Through Attack Injection",
+December, 2006 (http://www.di.fc.ul.pt/sobre/documentos/tech-reports/06-27.pdf).

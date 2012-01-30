@@ -1,0 +1,21 @@
+NON-ACTIVE WAIT
+
+TimeTrace (PAPI/glibtop) does not take into account sleep/lock time.
+It only measures useful CPU clocks/time.
+ - glibtop: Other time fields (utime and stime) also suffer from this behavior.
+ -    papi: only user space cycles are accounted
+
+Selected Solution: creation of a wtime measured by gettimeofday difference
+                   between last and start.
+
+
+ACCURATE DISK USAGE
+
+DiskTrace does not account for the previous size in fopen(w) calls, i.e., when
+an existing file is open and truncated it reports 0 size. This behavior makes
+DiskTrace disregard the deletion of the file contents.
+
+Solution 1: intercept the file name and stat it for its size before the open
+            syscall exit.
+
+Solution 2: perform a fopen(r)/fclose()...

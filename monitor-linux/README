@@ -1,0 +1,64 @@
+
+
+Tracing for 'openfile 3', a test target application that opens a couple of files
+and writes to them.
+
+ signals: 	[0]EXIT(0) 
+resource	current	max	total
+    procs: 	0	1	1
+     time: 	493793	294
+   memory: 	0	16	18
+     disk: 	300	300	300
+    files: 	0	1	3
+
+Explanation line by line:
+
+ signals:       [0]EXIT(0) 
+This application received no signals unit it exited with code 0.
+
+Next we have the resources. Each one has 3 columns.
+The current column displays the resource usage at the last call of
+trace (TracePID method).
+The max column is the maximum value ever obtained for the current resource
+usage.
+Finally we have the total column. This columns reflects the total different
+between last usage and current usage. Let's interpret the example above.
+
+    procs:      0       1       1
+Currently there are no more processes running. There was a maximum of 1 process
+running simultaneously. Globally, there was created 1 process.
+
+     time: 	493793	294
+Time is a special resource because it is a nondecreasing monotonic function.
+This means its last values (current) is always the maximum.
+The first column reflects the sum of cpu cycles spent by all the processes of
+the target (use PAPI for more accurate measurements).
+The second column is the wall time, or global "real" time, externally
+measured in milliseconds.
+
+   memory: 	0	16	18
+Memory is the number of allocated resident memory pages minus the pages for
+shared memory (such as for shared libraries).
+The target application is not currently occupying any memory, but has occupied a
+maximum of 16 pages at any give time.
+Since the beggining of the target execution, a total of 18 pages were
+allocated (only the increases in memory are accounted).
+
+     disk: 	300	300	300
+    files: 	0	1	3
+The same thing applies to the file system resource.
+Currently, the file system has 300 bytes written by the target application and
+no open files.
+The maximum disk space occupied by the application writes were also 300 bytes,
+and there was a maximum of 1 open files open at the same time.
+Since the beginning of the target execution the total disk activity is of 300
+bytes written (no bytes were deleted).
+
+These three different resource usage views can reflect different kinds of
+resource usage. It allows every resource usage to be observed with respect to
+its maximum usage (max column) or to its global usage (total column).
+The latter can pinpoint resource intensive usage applications (e.g., apps that
+perform many disk operations) that don't use many of those resources
+simultaneously.
+
+
